@@ -1,0 +1,64 @@
+{
+    "Changes": [
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Add",
+                "LogicalResourceId": "LambdaFunctionResource",
+                "ResourceType": "AWS::Lambda::Function",
+                "Scope": [],
+                "Details": []
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Add",
+                "LogicalResourceId": "LambdaPolicy",
+                "ResourceType": "AWS::IAM::Policy",
+                "Scope": [],
+                "Details": []
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Add",
+                "LogicalResourceId": "LambdaRole",
+                "ResourceType": "AWS::IAM::Role",
+                "Scope": [],
+                "Details": []
+            }
+        }
+    ],
+    "ChangeSetName": "dryrun-check",
+    "ChangeSetId": "arn:aws:cloudformation:us-west-2:913826031520:changeSet/dryrun-check/7c23c679-c944-4408-b163-3aa5ecbe6f6c",
+    "StackId": "arn:aws:cloudformation:us-west-2:913826031520:stack/test-stack/9e2cc760-bfa1-11f0-953a-02da411a0bd5",
+    "StackName": "test-stack",
+    "Description": null,
+    "Parameters": [
+        {
+            "ParameterKey": "Region",
+            "ParameterValue": "us-west-2"
+        },
+        {
+            "ParameterKey": "LambdaFunction",
+            "ParameterValue": "test-lambda"
+        }
+    ],
+    "CreationTime": "2025-11-12T08:30:49.251000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [
+        "CAPABILITY_NAMED_IAM"
+    ],
+    "Tags": null,
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null
+}

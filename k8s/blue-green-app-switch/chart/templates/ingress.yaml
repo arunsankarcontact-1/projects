@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: demo
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "59.94.189.115/32"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: app
+            port:
+              number: 80

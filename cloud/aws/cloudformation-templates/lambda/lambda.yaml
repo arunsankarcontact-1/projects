@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to create a Node.js Lambda function with custom IAM role and policy
+
+Parameters:
+  LambdaFunction:
+    Type: String
+    Description: Name of the Lambda function to create
+  Region:
+    Type: String
+    Default: us-west-2
+    AllowedValues:
+      - us-west-2
+      - us-east-1
+      - eu-west-3
+
+Mappings:
+  EnvMap:
+    us-west-2:
+      Env: nonprod
+    us-east-1:
+      Env: prod1
+    eu-west-3:
+      Env: prod2
+
+Resources:
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub
+        - "${LambdaFunction}-${Env}-role"
+        - { Env: !FindInMap [EnvMap, !Ref Region, Env] }
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        
+  LambdaPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub
+        - "${LambdaFunction}-${Env}-policy"
+        - { Env: !FindInMap [EnvMap, !Ref Region, Env] }
+      Roles:
+        - !Ref LambdaRole
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: "arn:aws:logs:*:*:*"
+          - Effect: Allow
+            Action:
+              - efs:ClientMount
+              - efs:ClientWrite
+              - efs:ClientRootAccess
+            Resource: "*"
+
+  LambdaFunctionResource:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref LambdaFunction
+      Runtime: nodejs22.x
+      Handler: index.handler
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            console.log("Lambda invoked:", event);
+            return {
+              statusCode: 200,
+              body: JSON.stringify({ message: "Hello from Node.js Lambda!" })
+            };
+          };
+      Timeout: 300
+      MemorySize: 512
+      VpcConfig:
+        SubnetIds:
+          - subnet-00cab525e9c3e359d
+          - subnet-04d110d4f9dcf2df9
+        SecurityGroupIds:
+          - sg-0044ab4ce369ee560
+    
+
+Outputs:
+  LambdaFunctionName:
+    Description: Name of the created Lambda function
+    Value: !Ref LambdaFunction
+  LambdaRoleName:
+    Description: IAM Role created for the Lambda function
+    Value: !Ref LambdaRole
+  LambdaPolicyName:
+    Description: Custom IAM Policy attached to the Lambda role
+    Value: !Ref LambdaPolicy
