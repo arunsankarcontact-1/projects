@@ -1,0 +1,31 @@
+#Create ec2 instance with public IP using terraform - Success
+
+#Install jenkins on ec2 instance 
+
+Issue 1 : 
+```
+Package jenkins is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+
+E: Package 'jenkins' has no installation candidate
+Failed to enable unit: Unit file jenkins.service does not exist.
+Failed to start jenkins.service: Unit jenkins.service not found.
+2025-11-07 06:32:29,164 - cc_scripts_user.py[WARNING]: Failed to run module scripts_user (scripts in /var/lib/cloud/instance/scripts)
+2025-11-07 06:32:29,165 - log_util.py[WARNING]: Running module scripts_user (<module 'cloudinit.config.cc_scripts_user' from '/usr/lib/python3/dist-packages/cloudinit/config/cc_scripts_user.py'>) failed
+Cloud-init v. 25.2-0ubuntu1~22.04.1 finished at Fri, 07 Nov 2025 06:32:29 +0000. Datasource DataSourceEc2Local.  Up 55.39 seconds
+```
+
+Inference and fix : Jenkins is not available from the default Ubuntu repositories, which happens because Jenkins is distributed from its official repository, not Ubuntu’s
+
+sudo apt install -y fontconfig openjdk-17-jre
+
+# 2. Add the Jenkins repo key and source list
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+#Access jenkins using public IP of ec2 instance - Success
