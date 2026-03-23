@@ -1,0 +1,29 @@
+controller:
+  replicaCount: 2
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+  limits:
+    cpu: "300m"
+    memory: "256Mi"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30082
+    https: 30445
+
+ingressClass: haproxy
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+controller:
+  config:
+    maxconn: "20000"
+    timeout-client: "30s"
+    timeout-server: "30s"
