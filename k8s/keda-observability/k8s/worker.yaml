@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: redis:7
+        command: ["/bin/sh"]
+        args:
+        - -c
+        - |
+          echo "Starting worker..."
+          while true; do
+            redis-cli -h redis LPOP myqueue
+            sleep 2
+          done
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
