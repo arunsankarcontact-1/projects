@@ -1,0 +1,22 @@
+server:
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: true
+    ingressClassName: haproxy
+
+    annotations:
+      haproxy.org/backend-protocol: "http"
+
+    hosts:
+      - argocd.local
+
+    paths:
+      - /
+
+    pathType: Prefix
+
+configs:
+  params:
+    server.insecure: true   

@@ -1,0 +1,29 @@
+controller:
+  replicaCount: 1
+
+  extraArgs:
+    - --enable-gateway-api  
+
+  config:
+    maxconn: "20000"
+    timeout-client: "30s"
+    timeout-server: "30s"
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30082
+    https: 30445
+
+ingressClass: haproxy
+
+metrics:
+  enabled: true
