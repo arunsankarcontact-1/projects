@@ -71,6 +71,7 @@ The goal is to demonstrate practical experience in building reliable, scalable, 
 ```
 projects/
 ├── cloud/
+├── IaC/
 ├── k8s/
 └── README.md
 ```
